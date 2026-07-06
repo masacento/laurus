@@ -24,6 +24,10 @@ pub mod registry;
 #[cfg(feature = "embeddings-candle")]
 pub mod candle_bert_embedder;
 
+// RTEN implementation (requires feature flag)
+#[cfg(feature = "embeddings-rten")]
+pub mod rten_bert_embedder;
+
 // OpenAI implementation (requires feature flag)
 #[cfg(feature = "embeddings-openai")]
 pub mod openai_embedder;
@@ -31,3 +35,7 @@ pub mod openai_embedder;
 // Multimodal embedding (requires embeddings-multimodal feature flag)
 #[cfg(feature = "embeddings-multimodal")]
 pub mod candle_clip_embedder;
+
+// RTEN-based CLIP multimodal embedding (requires embeddings-rten-multimodal feature flag)
+#[cfg(feature = "embeddings-rten-multimodal")]
+pub mod rten_clip_embedder;

@@ -41,11 +41,29 @@ pub enum EmbedderDefinition {
         model: String,
     },
 
+    /// RTEN-based BERT embedder for text embedding.
+    /// Requires the `embeddings-rten` feature.
+    RtenBert {
+        /// Path to the ONNX model file.
+        /// A `tokenizer.json` must exist in the same directory.
+        model: String,
+    },
+
     /// Candle-based CLIP multimodal embedder for text and image embedding.
     /// Requires the `embeddings-multimodal` feature.
     CandleClip {
         /// HuggingFace model ID
         /// (e.g. `"openai/clip-vit-base-patch32"`).
+        model: String,
+    },
+
+    /// RTEN-based CLIP multimodal embedder for text and image embedding.
+    /// Requires the `embeddings-rten-multimodal` feature.
+    RtenClip {
+        /// Path to the ONNX model file, or a HuggingFace model ID
+        /// (e.g. `"onnx-community/clip-vit-base-patch32-ONNX"`).
+        /// When a local path is used, a `tokenizer.json` must exist in the
+        /// same directory.
         model: String,
     },
 

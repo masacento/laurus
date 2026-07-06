@@ -68,6 +68,8 @@ hf-hub = { version = "0.5.0", optional = true }
 tokenizers = { version = "0.23.1", optional = true }
 reqwest = { version = "0.13.3", features = ["json"], optional = true }
 image = { version = "0.25.10", optional = true }
+rten = { version = "0.24.0", optional = true }
+rten-tensor = { version = "0.24.0", optional = true }
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 getrandom = { version = "0.4.2", features = ["wasm_js"] }
@@ -100,10 +102,14 @@ embeddings-multimodal = [
     "image",
 ]
 embeddings-openai = ["reqwest"]
+embeddings-rten = ["rten", "rten-tensor", "tokenizers", "hf-hub"]
+embeddings-rten-multimodal = ["embeddings-rten", "image"]
 embeddings-all = [
     "embeddings-candle",
     "embeddings-multimodal",
     "embeddings-openai",
+    "embeddings-rten",
+    "embeddings-rten-multimodal",
 ]
 # Experimental opt-in for the PQ FastScan integration in HNSW indexes
 # (Issue #695 / part D of #651). Enables the SIMD-accelerated K=16
@@ -137,6 +143,10 @@ required-features = ["embeddings-candle"]
 [[example]]
 name = "search_with_openai"
 required-features = ["embeddings-openai"]
+
+[[example]]
+name = "search_with_rten"
+required-features = ["embeddings-rten"]
 
 [[example]]
 name = "multimodal_search"
@@ -237,6 +247,7 @@ name = "bm25_simd_bench"
 harness = false
 
 [dev-dependencies]
+clap = { version = "4.6.1", features = ["derive"] }
 criterion = { version = "0.8.2", features = ["async_tokio"] }
 # Tests use `embedded://*` URIs to load lindera dictionaries. Cargo's feature
 # unification activates these features only for test/example/bench builds, so

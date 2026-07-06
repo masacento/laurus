@@ -50,6 +50,17 @@ pub async fn create_embedder_from_definition(
             "candle_bert embedder requires the 'embeddings-candle' feature to be enabled",
         )),
 
+        #[cfg(feature = "embeddings-rten")]
+        EmbedderDefinition::RtenBert { model } => {
+            use crate::embedding::rten_bert_embedder::RtenBertEmbedder;
+            let embedder = RtenBertEmbedder::new(model)?;
+            Ok(Arc::new(embedder))
+        }
+        #[cfg(not(feature = "embeddings-rten"))]
+        EmbedderDefinition::RtenBert { .. } => Err(LaurusError::invalid_argument(
+            "rten_bert embedder requires the 'embeddings-rten' feature to be enabled",
+        )),
+
         #[cfg(feature = "embeddings-multimodal")]
         EmbedderDefinition::CandleClip { model } => {
             use crate::embedding::candle_clip_embedder::CandleClipEmbedder;
@@ -59,6 +70,21 @@ pub async fn create_embedder_from_definition(
         #[cfg(not(feature = "embeddings-multimodal"))]
         EmbedderDefinition::CandleClip { .. } => Err(LaurusError::invalid_argument(
             "candle_clip embedder requires the 'embeddings-multimodal' feature to be enabled",
+        )),
+
+        #[cfg(feature = "embeddings-rten-multimodal")]
+        EmbedderDefinition::RtenClip { model } => {
+            use crate::embedding::rten_clip_embedder::RtenClipEmbedder;
+            let embedder = if std::path::Path::new(model).exists() {
+                RtenClipEmbedder::new(model)?
+            } else {
+                RtenClipEmbedder::new_from_hf(model)?
+            };
+            Ok(Arc::new(embedder))
+        }
+        #[cfg(not(feature = "embeddings-rten-multimodal"))]
+        EmbedderDefinition::RtenClip { .. } => Err(LaurusError::invalid_argument(
+            "rten_clip embedder requires the 'embeddings-rten-multimodal' feature to be enabled",
         )),
 
         #[cfg(feature = "embeddings-openai")]

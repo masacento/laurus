@@ -81,6 +81,10 @@ pub use embedding::embedder::{EmbedInput, EmbedInputType, Embedder};
 pub use embedding::openai_embedder::OpenAIEmbedder;
 pub use embedding::per_field::PerFieldEmbedder;
 pub use embedding::precomputed::PrecomputedEmbedder;
+#[cfg(feature = "embeddings-rten")]
+pub use embedding::rten_bert_embedder::Pooling;
+#[cfg(feature = "embeddings-rten")]
+pub use embedding::rten_bert_embedder::RtenBertEmbedder;
 pub use engine::Engine;
 pub use engine::EngineBuilder;
 pub use engine::EngineStats;
